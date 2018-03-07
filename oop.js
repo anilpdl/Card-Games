@@ -27,7 +27,7 @@ class Deck{
 	constructor(){
 		this.cards = [];				//Array of distributed cards
 	this._prepareDeck();				//Function call for deck preparation
-}
+	}
 
 	distribute(noOfPlayers, noOfCards){			//For Distributing card to players 
 		var players= [];							// Temp stores distributed cards		
@@ -44,34 +44,27 @@ class Deck{
 		return players;						//returns the distributed cards array when called
 	}
 
-	_prepareDeck(){
+	_prepareDeck(){							//Create a new deck object
 		for(var i=0;i<cardSuit.length;i++){
 			for(var j=0;j<cardValue.length;j++){
 				this.cards.push(new Card(j+1,cardValue[j],cardSuit[i]));	//Creates a card and pushes it to cards array
 			}
 		}
-
 	}
-
 }
 
+class Game {
 
-			//Create a new deck object
-			class Game {
+	constructor(gameName){
+		this.players = [];
+		this.gameName= gameName;
+	}
 
-				constructor(gameName){
-
-					this.players = [];
-					this.gameName= gameName;
-
-				}
-
-				_chkPlayerNumber(players,distributCardNum,deck){
-					if(deck.length<players.length*distributCardNum){
-						return 0;
-					}
-
-				}
+	_chkPlayerNumber(players,distributCardNum,deck){
+		if(deck.length<players.length*distributCardNum){
+			return 0;
+		}
+	}
 
 	start(numOfPlayers){					//Method for starting game
 		var myDeck = new Deck();
@@ -84,19 +77,16 @@ class Deck{
 		var distributedCards = myDeck.distribute(numOfPlayers, numOfCardsToDistribute);		//Passes the no of player and cards to be assigned
 		this._assignCardsToPlayers(distributedCards);			// Passes the distributed cards array to method
 		var result = this.checkHandStrengthValue(this.players);			//Checking hand strength
-		var winner = this.checkWinner(result);
-						//Checking winner
-						this.displayWinner(winner);
+		var winner = this.checkWinner(result);		//Checking winner
+		this.displayWinner(winner);
+	}
 
 
-					}
-
-
-					_createPlayers(numOfPlayers){
-						let players = []
+	_createPlayers(numOfPlayers){
+		let players = []
 		for(var i=0;i<numOfPlayers;i++){					//Creates the required no of players
 			players.push(new Player(`Player${i+1}`));		//String interpolation
-		};
+		}
 		return players;										// Returns the array of created Players
 	}
 
@@ -118,143 +108,116 @@ class Deck{
 			for(var j =0;j<3;j++){
 				valueOfCards.push(players[i].hand[j].cardValue);
 				suitOfCards.push(players[i].hand[j].suit);
-
 			}
 			assignedCardsStrengthValues.push(this._assignedCardsStrength(valueOfCards,suitOfCards));
 		}
 		return assignedCardsStrengthValues;
-
-
 	}
-
-	
 
 	_cardSameOfaKind(){
 		NumberUtil.sortArrayOfNumbers(arguments);
 		return arguments[0]===arguments[arguments.length-1];
 	}
 
-	_assignedCardsStrength(playerHandCardsValue,playerHandCardsSuit){
-		
+	_assignedCardsStrength(playerHandCardsValue,playerHandCardsSuit){	
 		playerHandCardsValue =  NumberUtil.sortArrayOfNumbers(playerHandCardsValue);
-		
-		
-		
 		var playerHandCardsValueSubtract = playerHandCardsValue[2]-1;
 		var playerHandCardsValueAdd = playerHandCardsValue[0]+1;
-
-
-
 		if(playerHandCardsValueSubtract<0){
 			playerHandCardsValueSubtract=13;
 		}
-
 		if(playerHandCardsValueAdd>13){
 			playerHandCardsValueAdd=0;
 		}
-
-
 		if(this._cardSameOfaKind(playerHandCardsValue[0],playerHandCardsValue[1],playerHandCardsValue[0])){
-		return 5;				//if trail returns value 5
+			return 5;				//if trail returns value 5
+		}
+		else if((this._cardSameOfaKind(playerHandCardsValueAdd,playerHandCardsValue[1])&&(this._cardSameofaKind(playerHandCardsValue[1]===playerHandCardsValueSubtract)))||(playerHandCardsValue[0]===1&&playerHandCardsValue[1]===2&&playerHandCardsValue[2]===13)){
+			if((playerHandCardsSuit[0]===playerHandCardsSuit[1])&&(playerHandCardsSuit[0]===playerHandCardsSuit[2])){
+				return 4;					//if straight flush returns value 4
+			}
+			return 3;						//if straight returns value 3
+		}
+		else if((this._cardSameofaKind(playerHandCardsSuit[0],playerHandCardsSuit[1]))&&(this._cardSameofaKind(playerHandCardsSuit[0],playerHandCardsSuit[2]))){
+			return 2;					//if flush, returns value 2		
+		}
 
-	}
-
-	
-	else if(((playerHandCardsValueAdd===playerHandCardsValue[1])&&(playerHandCardsValue[1]===playerHandCardsValueSubtract))||(playerHandCardsValue[0]===1&&playerHandCardsValue[1]===2&&playerHandCardsValue[2]===13)){
-		if((playerHandCardsSuit[0]===playerHandCardsSuit[1])&&(playerHandCardsSuit[0]===playerHandCardsSuit[2])){
-			return 4;					//if straight flush returns value 4
-
+		else if((this._cardSameOfaKind(playerHandCardsValue[0],playerHandCardsValue[1]))||(this._cardSameOfaKind(playerHandCardsValue[1],playerHandCardsValue[2]))||(this._cardSameOfaKind(playerHandCardsValue[0],playerHandCardsValue[2]))){
+			return 1;					//if pair, returns value 1
 		}
 		else{
-		return 3;						//if straight returns value 3
-	}
-}
-
-
-else if((playerHandCardsSuit[0]===playerHandCardsSuit[1])&&(playerHandCardsSuit[0]===playerHandCardsSuit[2])){
-		return 2;					//if flush, returns value 2
-		
-
+			return 0;					//if high card, returns value 0
+		}
 	}
 
-	else if((playerHandCardsValue[0]===playerHandCardsValue[1])||(playerHandCardsValue[1]===playerHandCardsValue[2])||(playerHandCardsValue[0]===playerHandCardsValue[2])){
-		return 1;					//if pair, returns value 1
-
-
+	_maxValuePlayerIndex(arr) {
+		var largest = Math.max.apply(Math, arr);
+		var indexes = [], i = -1;
+		while ((i = arr.indexOf(largest, i+1)) != -1){
+			indexes.push(i);
+		}
+		return indexes;
 	}
 
-	else{
-		return 0;					//if high card, returns value 0
-
-	}
-}
-
-_maxValuePlayerIndex(arr) {
-	var largest = Math.max.apply(Math, arr);
-
-	var indexes = [], i = -1;
-	while ((i = arr.indexOf(largest, i+1)) != -1){
-		indexes.push(i);
-	}
-	return indexes;
-}
-
-checkWinner(results){
-	var indexOfMaxValue = [];
-
-	indexOfMaxValue=(this._maxValuePlayerIndex(results));
-	if(indexOfMaxValue.length===1){
-		return indexOfMaxValue;
-	}
-
-
-	for(var i=0;i<indexOfMaxValue.length-1;i++){
-
+	checkWinner(results){
+		var indexOfMaxValue = [];
+		indexOfMaxValue=(this._maxValuePlayerIndex(results));
 		if(indexOfMaxValue.length===1){
 			return indexOfMaxValue;
 		}
-		var compareResult = this.equalResultsCardcompare(indexOfMaxValue[i+1],indexOfMaxValue[i]);
-		if(compareResult===-1){
-			indexOfMaxValue.splice(i,1);
-			i--;
+		return this._checkIndexforManyMaxValue(indexOfMaxValue);
+	}
+
+	_checkIndexforManyMaxValue(indexValue){
+		for(var i=0;i<indexValue.length-1;i++){
+			if(indexValue.length===1){
+				return indexValue;
+			}
+			var compareResult = this.equalResultsCardcompare(indexValue[i+1],indexValue[i]);
+			if(compareResult===-1){
+				indexValue.splice(i,1);
+				i--;
+			}
+			else if(compareResult=== 1){
+				indexValue.splice(i+1,1);
+				i--;
+			}
 		}
-		else if(compareResult=== 1){
-			indexOfMaxValue.splice(i+1,1);
-			i--;
+		return indexValue;
+	}
+
+	equalResultsCardcompare(x,y){
+		var valueOfCardsOfx = [];
+		var valueOfCardsOfy	= [];
+		for(var j =0;j<3;j++){
+			valueOfCardsOfx.push(this.players[x].hand[j].cardValue);
+			valueOfCardsOfy.push(this.players[y].hand[j].cardValue);
+		}
+		valueOfCardsOfx = NumberUtil.sortArrayOfNumbers(valueOfCardsOfx);
+		valueOfCardsOfy = NumberUtil.sortArrayOfNumbers(valueOfCardsOfy);
+
+		return this._checkGreaterCardValueWhenEqual(valueOfCardsOfx,valueOfCardsOfy);
+	}
+
+	_checkGreaterCardValueWhenEqual(arrOfx,arrOfy){
+		for(var i =3;i>=0;i--){
+			if((arrOfx[i])>(arrOfy[i])){
+				return -1;
+			}
+			else if((arrOfx[i])<(arrOfy[i])){
+				return 1;
+			}
+			if(i===0){
+				return 0;
+			}
 		}
 	}
-	return indexOfMaxValue;
-}
 
-equalResultsCardcompare(x,y){
-	var valueOfCardsOfx = [];
-	var valueOfCardsOfy	= [];
-
-	for(var j =0;j<3;j++){
-		valueOfCardsOfx.push(this.players[x].hand[j].cardValue);
-		valueOfCardsOfy.push(this.players[y].hand[j].cardValue);
-	}
-	valueOfCardsOfx = NumberUtil.sortArrayOfNumbers(valueOfCardsOfx);
-	valueOfCardsOfy = NumberUtil.sortArrayOfNumbers(valueOfCardsOfy);
-
-	for(var i =3;i>=0;i--){
-		if((valueOfCardsOfx[i])>(valueOfCardsOfy[i])){
-			return -1;
-		}
-		else if((valueOfCardsOfx[i])<(valueOfCardsOfy[i])){
-			return 1;
-		}
-		if(i===0){
-			return 0;
+	displayWinner(winplayer){
+		for(var i=0;i<winplayer.length;i++){
+			console.log("Winner:" + this.players[winplayer[i]].name);
 		}
 	}
-}
-
-displayWinner(winplayer){
-	for(var i=0;i<winplayer.length;i++){
-		console.log("Winner:" + this.players[winplayer[i]].name);
-	}
-}
 }
 
 class Player{

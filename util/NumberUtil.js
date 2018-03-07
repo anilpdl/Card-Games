@@ -4,8 +4,8 @@ class NumberUtil{
 		return a-b;
 	}
 
-	static sortArrayOfNumbers(sortValues){
-		
+	static sortArrayOfNumbers(_sortValues){
+		let sortValues = [..._sortValues];		
 		return 	(sortValues.sort(this.sortTwoNumbers));
 	}
 
