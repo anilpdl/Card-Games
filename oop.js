@@ -165,7 +165,6 @@ class Game {
 		if(indexOfMaxValue.length===1){
 			return indexOfMaxValue;
 		}
-		console.log("Index of max value:"+indexOfMaxValue);
 		return this._checkIndexforManyMaxValue(indexOfMaxValue);
 	}
 
@@ -202,7 +201,6 @@ class Game {
 	}
 
 	_checkGreaterCardValueWhenEqual(arrOfx,arrOfy){
-		console.log("Compare");
 		for(var i =3;i>=0;i--){
 			if((arrOfx[i])>(arrOfy[i])){
 				return -1;
