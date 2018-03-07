@@ -57,8 +57,8 @@ class Deck{
 class NumberUtil{
 
 	static sortTwoNumbers(a, b) {
-    	return a-b;
-			}
+		return a-b;
+	}
 
 	static sortArrayOfNumbers(sortValues){
 		
@@ -67,21 +67,21 @@ class NumberUtil{
 
 }
 			//Create a new deck object
-class Game {
-	
-	constructor(gameName){
-		
-		this.players = [];
-		this.gameName= gameName;
-		
-	}
+			class Game {
+				
+				constructor(gameName){
+					
+					this.players = [];
+					this.gameName= gameName;
+					
+				}
 
-	_chkPlayerNumber(players,distributCardNum,deck){
-		if(deck.length<players.length*distributCardNum){
-			return 0;
-		}
+				_chkPlayerNumber(players,distributCardNum,deck){
+					if(deck.length<players.length*distributCardNum){
+						return 0;
+					}
 
-	}
+				}
 
 	start(numOfPlayers){					//Method for starting game
 		var myDeck = new Deck();
@@ -96,14 +96,14 @@ class Game {
 		var result = this.checkHandStrengthValue(this.players);			//Checking hand strength
 		var winner = this.checkWinner(result);
 						//Checking winner
-		this.displayWinner(winner);
-		
+						this.displayWinner(winner);
+						
 
-	}
+					}
 
 
-	_createPlayers(numOfPlayers){
-		let players = []
+					_createPlayers(numOfPlayers){
+						let players = []
 		for(var i=0;i<numOfPlayers;i++){					//Creates the required no of players
 			players.push(new Player(`Player${i+1}`));		//String interpolation
 		};
@@ -129,11 +129,11 @@ class Game {
 				valueOfCards.push(players[i].hand[j].cardValue);
 				suitOfCards.push(players[i].hand[j].suit);
 
-				}
-		assignedCardsStrengthValues.push(this._assignedCardsStrength(valueOfCards,suitOfCards));
-	}
-	return assignedCardsStrengthValues;
-	 	
+			}
+			assignedCardsStrengthValues.push(this._assignedCardsStrength(valueOfCards,suitOfCards));
+		}
+		return assignedCardsStrengthValues;
+		
 
 	}
 
@@ -142,7 +142,7 @@ class Game {
 	_cardSameOfaKind(){
 		NumberUtil.sortArrayOfNumbers(arguments);
 		return arguments[0]===arguments[arguments.length-1];
-		}
+	}
 
 	_assignedCardsStrength(playerHandCardsValue,playerHandCardsSuit){
 		
@@ -150,21 +150,21 @@ class Game {
 		
 		
 		
-	var playerHandCardsValueSubtract = playerHandCardsValue[2]-1;
-	var playerHandCardsValueAdd = playerHandCardsValue[0]+1;
-	
+		var playerHandCardsValueSubtract = playerHandCardsValue[2]-1;
+		var playerHandCardsValueAdd = playerHandCardsValue[0]+1;
+		
 
 
-	if(playerHandCardsValueSubtract<0){
-		playerHandCardsValueSubtract=13;
-	}
+		if(playerHandCardsValueSubtract<0){
+			playerHandCardsValueSubtract=13;
+		}
 
-	if(playerHandCardsValueAdd>13){
-		playerHandCardsValueAdd=0;
-	}
+		if(playerHandCardsValueAdd>13){
+			playerHandCardsValueAdd=0;
+		}
 
 
-	if((playerHandCardsValue[0]===playerHandCardsValue[1])&&(playerHandCardsValue[1]===playerHandCardsValue[2])){
+		if((playerHandCardsValue[0]===playerHandCardsValue[1])&&(playerHandCardsValue[1]===playerHandCardsValue[2])){
 		return 5;				//if trail returns value 5
 
 	}
@@ -178,10 +178,10 @@ class Game {
 		else{
 		return 3;						//if straight returns value 3
 	}
-	}
+}
 
 
-	else if((playerHandCardsSuit[0]===playerHandCardsSuit[1])&&(playerHandCardsSuit[0]===playerHandCardsSuit[2])){
+else if((playerHandCardsSuit[0]===playerHandCardsSuit[1])&&(playerHandCardsSuit[0]===playerHandCardsSuit[2])){
 		return 2;					//if flush, returns value 2
 		
 
@@ -197,74 +197,74 @@ class Game {
 		return 0;					//if high card, returns value 0
 
 	}
+}
+
+_maxValuePlayerIndex(arr) {
+	var largest = Math.max.apply(Math, arr);
+
+	var indexes = [], i = -1;
+	while ((i = arr.indexOf(largest, i+1)) != -1){
+		indexes.push(i);
 	}
+	return indexes;
+}
 
-	 _maxValuePlayerIndex(arr) {
-			var largest = Math.max.apply(Math, arr);
-
-			var indexes = [], i = -1;
-			while ((i = arr.indexOf(largest, i+1)) != -1){
-				indexes.push(i);
-			}
-			return indexes;
-		}
-
-	checkWinner(results){
-		var indexOfMaxValue = [];
-		
-		indexOfMaxValue=(this._maxValuePlayerIndex(results));
-		if(indexOfMaxValue.length===1){
-			return indexOfMaxValue;
-		}
-
-
-		for(var i=0;i<indexOfMaxValue.length-1;i++){
-			
-			if(indexOfMaxValue.length===1){
-					return indexOfMaxValue;
-				}
-			var compareResult = this.equalResultsCardcompare(indexOfMaxValue[i+1],indexOfMaxValue[i]);
-			if(compareResult===-1){
-				indexOfMaxValue.splice(i,1);
-				i--;
-			}
-			else if(compareResult=== 1){
-				indexOfMaxValue.splice(i+1,1);
-				i--;
-			}
-		}
+checkWinner(results){
+	var indexOfMaxValue = [];
+	
+	indexOfMaxValue=(this._maxValuePlayerIndex(results));
+	if(indexOfMaxValue.length===1){
 		return indexOfMaxValue;
 	}
 
-	equalResultsCardcompare(x,y){
-		var valueOfCardsOfx = [];
-		var valueOfCardsOfy	= [];
+
+	for(var i=0;i<indexOfMaxValue.length-1;i++){
 		
-			for(var j =0;j<3;j++){
-				valueOfCardsOfx.push(this.players[x].hand[j].cardValue);
-				valueOfCardsOfy.push(this.players[y].hand[j].cardValue);
-				}
-			valueOfCardsOfx = NumberUtil.sortArrayOfNumbers(valueOfCardsOfx);
-			valueOfCardsOfy = NumberUtil.sortArrayOfNumbers(valueOfCardsOfy);
-
-			for(var i =3;i>=0;i--){
-			if((valueOfCardsOfx[i])>(valueOfCardsOfy[i])){
-				return -1;
-			}
-			else if((valueOfCardsOfx[i])<(valueOfCardsOfy[i])){
-				return 1;
-			}
-			if(i===0){
-				return 0;
-			}
+		if(indexOfMaxValue.length===1){
+			return indexOfMaxValue;
+		}
+		var compareResult = this.equalResultsCardcompare(indexOfMaxValue[i+1],indexOfMaxValue[i]);
+		if(compareResult===-1){
+			indexOfMaxValue.splice(i,1);
+			i--;
+		}
+		else if(compareResult=== 1){
+			indexOfMaxValue.splice(i+1,1);
+			i--;
 		}
 	}
+	return indexOfMaxValue;
+}
 
-	displayWinner(winplayer){
-		for(var i=0;i<winplayer.length;i++){
-			console.log("Winner:" + this.players[winplayer[i]].name);
+equalResultsCardcompare(x,y){
+	var valueOfCardsOfx = [];
+	var valueOfCardsOfy	= [];
+	
+	for(var j =0;j<3;j++){
+		valueOfCardsOfx.push(this.players[x].hand[j].cardValue);
+		valueOfCardsOfy.push(this.players[y].hand[j].cardValue);
+	}
+	valueOfCardsOfx = NumberUtil.sortArrayOfNumbers(valueOfCardsOfx);
+	valueOfCardsOfy = NumberUtil.sortArrayOfNumbers(valueOfCardsOfy);
+
+	for(var i =3;i>=0;i--){
+		if((valueOfCardsOfx[i])>(valueOfCardsOfy[i])){
+			return -1;
+		}
+		else if((valueOfCardsOfx[i])<(valueOfCardsOfy[i])){
+			return 1;
+		}
+		if(i===0){
+			return 0;
 		}
 	}
+}
+
+displayWinner(winplayer){
+	for(var i=0;i<winplayer.length;i++){
+		console.log("Winner:" + this.players[winplayer[i]].name);
+	}
+}
 }
 
 class Player{
@@ -289,15 +289,15 @@ class Player{
 var userInputPlayerNum;
 var readline = require('readline');
 
-		var rl = readline.createInterface(process.stdin, process.stdout);
+var rl = readline.createInterface(process.stdin, process.stdout);
 
-		rl.question("Input number of players ", function(answer) {
-			userInputPlayerNum = answer;
-			let teenPatti = new Game('TeenPatti');
+rl.question("Input number of players ", function(answer) {
+	userInputPlayerNum = answer;
+	let teenPatti = new Game('TeenPatti');
 
 	teenPatti.start(userInputPlayerNum);
-			rl.close();
-		});
+	rl.close();
+});
 
 
 
