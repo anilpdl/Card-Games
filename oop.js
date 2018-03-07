@@ -6,6 +6,7 @@ Bonus: Display who won the game
 Player X won!
 Tips: Make a card class and player class*/
 
+const NumberUtil = require('./util/NumberUtil.js');
 
 var cardValue = ["2","3","4","5","6","7","8","9","10","Jack","Queen","King","Ace"];	// Array of Card Number
 var cardSuit = ["Clubs","Spades","Hearts","Diamonds"];		// Array of card suits
@@ -54,26 +55,15 @@ class Deck{
 
 }
 
-class NumberUtil{
 
-	static sortTwoNumbers(a, b) {
-		return a-b;
-	}
-
-	static sortArrayOfNumbers(sortValues){
-		
-		return 	(sortValues.sort(this.sortTwoNumbers));
-	}
-
-}
 			//Create a new deck object
 			class Game {
-				
+
 				constructor(gameName){
-					
+
 					this.players = [];
 					this.gameName= gameName;
-					
+
 				}
 
 				_chkPlayerNumber(players,distributCardNum,deck){
@@ -97,7 +87,7 @@ class NumberUtil{
 		var winner = this.checkWinner(result);
 						//Checking winner
 						this.displayWinner(winner);
-						
+
 
 					}
 
@@ -133,7 +123,7 @@ class NumberUtil{
 			assignedCardsStrengthValues.push(this._assignedCardsStrength(valueOfCards,suitOfCards));
 		}
 		return assignedCardsStrengthValues;
-		
+
 
 	}
 
@@ -152,7 +142,7 @@ class NumberUtil{
 		
 		var playerHandCardsValueSubtract = playerHandCardsValue[2]-1;
 		var playerHandCardsValueAdd = playerHandCardsValue[0]+1;
-		
+
 
 
 		if(playerHandCardsValueSubtract<0){
@@ -164,7 +154,7 @@ class NumberUtil{
 		}
 
 
-		if((playerHandCardsValue[0]===playerHandCardsValue[1])&&(playerHandCardsValue[1]===playerHandCardsValue[2])){
+		if(this._cardSameOfaKind(playerHandCardsValue[0],playerHandCardsValue[1],playerHandCardsValue[0])){
 		return 5;				//if trail returns value 5
 
 	}
@@ -211,7 +201,7 @@ _maxValuePlayerIndex(arr) {
 
 checkWinner(results){
 	var indexOfMaxValue = [];
-	
+
 	indexOfMaxValue=(this._maxValuePlayerIndex(results));
 	if(indexOfMaxValue.length===1){
 		return indexOfMaxValue;
@@ -219,7 +209,7 @@ checkWinner(results){
 
 
 	for(var i=0;i<indexOfMaxValue.length-1;i++){
-		
+
 		if(indexOfMaxValue.length===1){
 			return indexOfMaxValue;
 		}
@@ -239,7 +229,7 @@ checkWinner(results){
 equalResultsCardcompare(x,y){
 	var valueOfCardsOfx = [];
 	var valueOfCardsOfy	= [];
-	
+
 	for(var j =0;j<3;j++){
 		valueOfCardsOfx.push(this.players[x].hand[j].cardValue);
 		valueOfCardsOfy.push(this.players[y].hand[j].cardValue);
