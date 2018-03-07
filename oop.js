@@ -60,20 +60,20 @@ class Game {
 		this.gameName= gameName;
 	}
 
-	_chkPlayerNumber(players,distributCardNum,deck){
-		if(deck.length<players.length*distributCardNum){
-			return 0;
+	_chkPlayerNumber(players,distributCardNum){
+		if(players*distributCardNum<52){
+			return true;
 		}
 	}
 
 	start(numOfPlayers){					//Method for starting game
 		var myDeck = new Deck();
 		const numOfCardsToDistribute = 3;
-		if(numOfPlayers>17){
+		this.players= this._createPlayers(numOfPlayers);
+		if(!this._chkPlayerNumber(numOfPlayers,numOfCardsToDistribute)){
 			console.log("More than enough players. Cannot distribute cards to all players");
 			return;
-		}
-		this.players= this._createPlayers(numOfPlayers);									//Create players using method
+		}									//Create players using method
 		var distributedCards = myDeck.distribute(numOfPlayers, numOfCardsToDistribute);		//Passes the no of player and cards to be assigned
 		this._assignCardsToPlayers(distributedCards);			// Passes the distributed cards array to method
 		var result = this.checkHandStrengthValue(this.players);			//Checking hand strength
@@ -129,16 +129,16 @@ class Game {
 		if(playerHandCardsValueAdd>13){
 			playerHandCardsValueAdd=0;
 		}
-		if(this._cardSameOfaKind(playerHandCardsValue[0],playerHandCardsValue[1],playerHandCardsValue[0])){
+		if(this._cardSameOfaKind(playerHandCardsValue[0],playerHandCardsValue[1],playerHandCardsValue[2])){
 			return 5;				//if trail returns value 5
 		}
-		else if((this._cardSameOfaKind(playerHandCardsValueAdd,playerHandCardsValue[1])&&(this._cardSameofaKind(playerHandCardsValue[1]===playerHandCardsValueSubtract)))||(playerHandCardsValue[0]===1&&playerHandCardsValue[1]===2&&playerHandCardsValue[2]===13)){
+		else if((this._cardSameOfaKind(playerHandCardsValueAdd,playerHandCardsValue[1])&&(this._cardSameOfaKind(playerHandCardsValue[1],playerHandCardsValueSubtract)))||(playerHandCardsValue[0]===1&&playerHandCardsValue[1]===2&&playerHandCardsValue[2]===13)){
 			if((playerHandCardsSuit[0]===playerHandCardsSuit[1])&&(playerHandCardsSuit[0]===playerHandCardsSuit[2])){
 				return 4;					//if straight flush returns value 4
 			}
 			return 3;						//if straight returns value 3
 		}
-		else if((this._cardSameofaKind(playerHandCardsSuit[0],playerHandCardsSuit[1]))&&(this._cardSameofaKind(playerHandCardsSuit[0],playerHandCardsSuit[2]))){
+		else if((playerHandCardsSuit[0]===playerHandCardsSuit[1])&&(playerHandCardsSuit[0]===playerHandCardsSuit[2])){
 			return 2;					//if flush, returns value 2		
 		}
 
@@ -165,6 +165,7 @@ class Game {
 		if(indexOfMaxValue.length===1){
 			return indexOfMaxValue;
 		}
+		console.log("Index of max value:"+indexOfMaxValue);
 		return this._checkIndexforManyMaxValue(indexOfMaxValue);
 	}
 
@@ -187,6 +188,7 @@ class Game {
 	}
 
 	equalResultsCardcompare(x,y){
+
 		var valueOfCardsOfx = [];
 		var valueOfCardsOfy	= [];
 		for(var j =0;j<3;j++){
@@ -200,6 +202,7 @@ class Game {
 	}
 
 	_checkGreaterCardValueWhenEqual(arrOfx,arrOfy){
+		console.log("Compare");
 		for(var i =3;i>=0;i--){
 			if((arrOfx[i])>(arrOfy[i])){
 				return -1;
@@ -251,6 +254,5 @@ rl.question("Input number of players ", function(answer) {
 	teenPatti.start(userInputPlayerNum);
 	rl.close();
 });
-
 
 
