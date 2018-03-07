@@ -1,0 +1,25 @@
+{
+  "name": "card-game",
+  "version": "1.0.0",
+  "description": "card game collection",
+  "main": "oop.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pdlanl/Card-Games.git"
+  },
+  "keywords": [
+    "card",
+    "game",
+    "card",
+    "game"
+  ],
+  "author": "Anil Poudel",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pdlanl/Card-Games/issues"
+  },
+  "homepage": "https://github.com/pdlanl/Card-Games#readme"
+}
